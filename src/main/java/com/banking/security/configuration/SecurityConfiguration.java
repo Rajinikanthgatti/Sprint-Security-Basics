@@ -32,5 +32,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authenticated().antMatchers("/notices").permitAll()
 				.antMatchers("/contacts").permitAll().and().formLogin().and()
 				.httpBasic();
+		/**
+		 * Configuration to deny all the requests - Applicable incase of
+		 * maintenance
+		 */
+
+		/*
+		 * httpSecurity.authorizeRequests().anyRequest().denyAll().and()
+		 * .formLogin().and().httpBasic();
+		 */
+
+		/**
+		 * Configuration to permit all the requests - No Security
+		 */
+
+		/*
+		 * httpSecurity.authorizeRequests().anyRequest().permitAll().and()
+		 * .formLogin().and().httpBasic();
+		 */
 	}
 }
