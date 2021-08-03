@@ -1,8 +1,11 @@
 package com.banking.security.configuration;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -50,5 +53,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 * httpSecurity.authorizeRequests().anyRequest().permitAll().and()
 		 * .formLogin().and().httpBasic();
 		 */
+	}
+
+	/**
+	 * inMemoryAuthentication that is adding certain users with specific roles
+	 */
+	protected void configure(
+			AuthenticationManagerBuilder authenticationManagerBuilder)
+			throws Exception {
+		authenticationManagerBuilder.inMemoryAuthentication().withUser("admin")
+				.password("12345").roles("admin").and().withUser("user")
+				.password("test123").roles("user").and()
+				.passwordEncoder(NoOpPasswordEncoder.getInstance());
 	}
 }
