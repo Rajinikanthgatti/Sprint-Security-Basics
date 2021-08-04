@@ -1,11 +1,14 @@
 package com.banking.security.configuration;
 
+import org.apache.catalina.User;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -57,13 +60,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	/**
 	 * inMemoryAuthentication that is adding certain users with specific roles
+	 * @throws Exception 
 	 */
+	/*
+	 * @Override protected void configure( AuthenticationManagerBuilder
+	 * authenticationManagerBuilder) throws Exception {
+	 * authenticationManagerBuilder.inMemoryAuthentication().withUser("admin")
+	 * .password("12345").roles("admin").and().withUser("user")
+	 * .password("test123").roles("user").and()
+	 * .passwordEncoder(NoOpPasswordEncoder.getInstance()); }
+	 */
+	
+	@Override
 	protected void configure(
-			AuthenticationManagerBuilder authenticationManagerBuilder)
-			throws Exception {
-		authenticationManagerBuilder.inMemoryAuthentication().withUser("admin")
-				.password("12345").roles("admin").and().withUser("user")
-				.password("test123").roles("user").and()
-				.passwordEncoder(NoOpPasswordEncoder.getInstance());
+			AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
+		UserDetails user1 = org.springframework.security.core.userdetails.User.withUsername("admin").password("123").authorities("admin").build();
+		UserDetails user2 = org.springframework.security.core.userdetails.User.withUsername("user").password("12345").authorities("read").build();
+		userDetailsManager.createUser(user1);
+		userDetailsManager.createUser(user2);
+		authenticationManagerBuilder.userDetailsService(userDetailsManager).passwordEncoder(NoOpPasswordEncoder.getInstance());
 	}
 }
