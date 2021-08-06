@@ -1,14 +1,19 @@
 package com.banking.security.configuration;
 
+import javax.sql.DataSource;
+
 import org.apache.catalina.User;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -71,14 +76,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 * .passwordEncoder(NoOpPasswordEncoder.getInstance()); }
 	 */
 	
-	@Override
-	protected void configure(
-			AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
-		UserDetails user1 = org.springframework.security.core.userdetails.User.withUsername("admin").password("123").authorities("admin").build();
-		UserDetails user2 = org.springframework.security.core.userdetails.User.withUsername("user").password("12345").authorities("read").build();
-		userDetailsManager.createUser(user1);
-		userDetailsManager.createUser(user2);
-		authenticationManagerBuilder.userDetailsService(userDetailsManager).passwordEncoder(NoOpPasswordEncoder.getInstance());
+	/*
+	 * @Override protected void configure( AuthenticationManagerBuilder
+	 * authenticationManagerBuilder) throws Exception { InMemoryUserDetailsManager
+	 * userDetailsManager = new InMemoryUserDetailsManager(); UserDetails user1 =
+	 * org.springframework.security.core.userdetails.User.withUsername("admin").
+	 * password("123").authorities("admin").build(); UserDetails user2 =
+	 * org.springframework.security.core.userdetails.User.withUsername("user").
+	 * password("12345").authorities("read").build();
+	 * userDetailsManager.createUser(user1); userDetailsManager.createUser(user2);
+	 * authenticationManagerBuilder.userDetailsService(userDetailsManager).
+	 * passwordEncoder(NoOpPasswordEncoder.getInstance()); }
+	 */
+	
+	@Bean
+	public UserDetailsService userDetailsService(DataSource dataSource) {
+		return new JdbcUserDetailsManager(dataSource);
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
 	}
 }
