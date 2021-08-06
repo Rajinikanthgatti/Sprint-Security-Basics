@@ -18,3 +18,15 @@ INSERT INTO "public"."users" ("id", "username", "password", "enabled")
  VALUES (1, 'rk', '123', 1);
 INSERT INTO "public"."authorities" ("id", "username", "authority")
  VALUES (1, 'rk', 'write');
+ 
+ //Creating Custom tab and using those fields for authentication
+ 
+ CREATE TABLE customer (
+id SERIAL PRIMARY KEY,
+email varchar(45) NOT NULL,
+password varchar(45) NOT NULL,
+role INT NOT NULL 
+)
+
+INSERT INTO "public"."customer" ("id", "email", "password", "role")
+ VALUES (1, 'example@example.com', '123', 'admin');

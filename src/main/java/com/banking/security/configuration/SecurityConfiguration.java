@@ -89,10 +89,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 * passwordEncoder(NoOpPasswordEncoder.getInstance()); }
 	 */
 	
-	@Bean
-	public UserDetailsService userDetailsService(DataSource dataSource) {
-		return new JdbcUserDetailsManager(dataSource);
-	}
+	/*
+	 * @Bean public UserDetailsService userDetailsService(DataSource dataSource) {
+	 * return new JdbcUserDetailsManager(dataSource); }
+	 */
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
