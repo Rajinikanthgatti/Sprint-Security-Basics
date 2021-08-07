@@ -30,3 +30,14 @@ role INT NOT NULL
 
 INSERT INTO "public"."customer" ("id", "email", "password", "role")
  VALUES (1, 'example@example.com', '123', 'admin');
+ 
+ //Updating the customer table as per the BCryptPasswordEncoder
+ CREATE TABLE customer (
+id SERIAL PRIMARY KEY,
+email varchar(45) NOT NULL,
+password varchar(256) NOT NULL,
+role varchar(45) NOT NULL 
+);
+
+INSERT INTO "public"."customer" ("id", "email", "password", "role")
+ VALUES (1, 'example@example.com', '$2a$12$XwLkAXsFE1f6kcfB0UHA9uQtgRREAv3AVPTLNI0Z9eKA5c.Y/ocj6', 'admin');
